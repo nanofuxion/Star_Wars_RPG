@@ -53,7 +53,7 @@
             //create card 
             gameCharacters[i].card = $("<div>");
             gameCharacters[i].card.addClass("card charcard float-left col-lg-2 col-md-6 col-sm-12 mx-auto selectable");
-            gameCharacters[i].card.attr({ "data-name": gameCharacters[i].name, "data-health": gameCharacters[i].health });
+            gameCharacters[i].card.attr({ "data-name": gameCharacters[i].name, "data-health": gameCharacters[i].health, "data-cardSlot": i });
 
             //img
             var charImage = $("<img>");
@@ -85,19 +85,61 @@
             charCdP.appendTo(charCdBody);
 
 
-            $(".charshere").after(gameCharacters[i].card);
-
             // ads character divs to an array for easy manipulation
             charDivs.push($(gameCharacters[i].card));
+
+            $(".charshere").after(charDivs[i]);
+
+
 
         }
 
         $(".selectable").on("click", function() {
-            // $(".goodguy").clone().appendTo("#outPopUp");
-            if ($(this).hasClass("badones") && (isStarted == true))
+            for (let i = 0; i < charDivs.length; i++) {
+
+                if (this == charDivs[i]) {
+
+                }
+
+            }
+        });
+
+
+        $(".selectable").on("click", function() {
+            if ($(this).hasClass("badones") && (isStarted == true)) {
                 console.log($(this));
-            $(".goodguy").clone().appendTo("#outPopUp");
-            $(this).clone().appendTo("#outPopUp");
+                var goodguybanner = $(".goodguy").clone().appendTo("#sonOFoutPopUp");
+                var badguybanner = $(this).clone().appendTo("#sonOFoutPopUp");
+
+                $("#outPopUp").css({
+                    "top": "15%",
+                    "left": "10%",
+                    "bottom": "15%",
+                    "right": "15%",
+                    "background-color": "#383838"
+                });
+                var bannercards = [badguybanner, goodguybanner];
+                var attackAnimation = $("<div>");
+                attackAnimation.addClass("row");
+                attackAnimation.appendTo("#outPopUp");
+
+
+                charDivs[3].attr("data-health").text = "" + 100;
+                bannercards.forEach(function(vari, i, a) {
+                    vari.addClass("px-auto");
+                    vari.removeClass("selectable");
+                    // vari.children()[1].css({
+                    //     "padding-bottom": "0",
+                    //     "max-height": "10%",
+                    //     "margin-bottom": "15%",
+                    //     "padding-top": "5px",
+                    //     "padding-left": "0"
+                    // });
+                    vari.children()[1].children[0].remove();
+                    vari.children()[1].children[1].text = charDivs[vari.attr("data-cardSlot")].attr("data-health");
+                });
+
+            }
         });
 
 
@@ -106,7 +148,7 @@
                 $(this).removeClass("selectable");
                 $(this).addClass("goodguy");
                 makebad();
-                isStarted = true;
+
             }
         });
 
@@ -116,6 +158,7 @@
                 $(".badshere").after($(".selectable"));
                 $(".selectable").addClass("badones");
                 $(".selectable").removeClass("selectable");
+                isStarted = true;
             }
         }
     });
